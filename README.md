@@ -3,7 +3,7 @@ LensArt is a Art Recognition and Discovery System which works on a deep learning
 uploaded image of any painting and provides more context to it like the artist name, a simple amount of information
 regarding the artist and the historical context behind the painting giving depth to the work 
 <p align="center">
-  <img src="media/Recording%202026-04-30%20150925.gif" width="50%"/>
+  <img src="media/Recording%202026-04-30%20150925.gif" width="70%"/>
 </p>
 ## 🚀 Features
 
