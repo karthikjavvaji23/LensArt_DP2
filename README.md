@@ -1,4 +1,4 @@
-# LensArt —  (ResNet50 + CLIP)
+# LensArt —  Art Recognition System
 LensArt is a Art Recognition and Discovery System which works on a deep learning system that takes the
 uploaded image of any painting and provides more context to it like the artist name, a simple amount of information
 regarding the artist and the historical context behind the painting giving depth to the work 
