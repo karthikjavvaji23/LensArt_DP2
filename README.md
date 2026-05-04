@@ -1,19 +1,23 @@
-# LensArt — Hybrid (ResNet50 + CLIP)
+# LensArt —  (ResNet50 + CLIP)
+LensArt is a Art Recognition and Discovery System which works on a deep learning system that takes the
+uploaded image of any painting and provides more context to it like the artist name, a simple amount of information
+regarding the artist and the historical context behind the painting giving depth to the work 
 
-**Final hybrid pipeline for the Data Science Practicum 2 submission.**
+## 🚀 Features
 
-| Component | Model | What it does |
-|-----------|-------|--------------|
-| Style classification | **ResNet50** (your trained weights) | Predicts one of the 10 ArtBench-10 styles |
-| Artist prediction | **CLIP ViT-B/32** (zero-shot) | Ranks 41 well-known painters via text-prompt similarity |
-| Visual similarity  | **CLIP ViT-B/32** (image embeddings) | Top-5 cosine-similar paintings from the indexed corpus |
-| Biography          | Wikipedia REST → Met fallback | Short summary + thumbnail |
-| UI                 | Flask + HTML / CSS / vanilla JS | Single-page gallery aesthetic |
+- 🖼️ Upload any artwork image (JPEG/PNG)
+- 🎭 Art style classification using ResNet50
+- 🧠 Artist identification using CLIP (zero-shot)
+- 🔍 Visual similarity search using embeddings
+- 📚 Artist biography via Wikipedia & Met Museum APIs
+- ⚡ Fast inference (1–2 seconds on CPU)
+- 🌐 Flask-based interactive web interface
 
+  
 ## How to run
 
 1. Place your trained ResNet50 checkpoint at `models/resnet_model.pth`.
-2. (Optional) Drop ArtBench dataset images at `data/images/train/<style>/`
+2. Drop ArtBench dataset images at `data/images/train/<style>/`
    so the similarity index can index real paintings.
 3. **First time only:** double-click `setup_venv.bat` (creates `.venv\` and
    installs CPU-only PyTorch + CLIP + Flask, ~5 minutes).
@@ -68,20 +72,4 @@ LensArt_Hybrid/
 }
 ```
 
-## What changed vs the previous Streamlit version
 
-* **Streamlit replaced by Flask** — a single-page web app served on
-  `localhost:5000`, matching the existing LensArt MVP front-end.
-* **Style now uses your trained ResNet50** instead of CLIP zero-shot.
-* **Artist classification still uses CLIP zero-shot** — no labelled-artist
-  corpus required, generalises beyond the 10 ArtBench styles.
-* **Similarity reuses the CLIP image embedding** computed during artist
-  prediction, so we get three tasks out of two model passes.
-
-## Why the hybrid design
-
-CLIP is excellent at fine-grained zero-shot recognition (artist names, style
-keywords) because its 400M (image, caption) training set names exactly those
-concepts. ResNet50 fine-tuned on ArtBench is excellent at the well-defined
-10-class style taxonomy because the labels are deterministic and the dataset
-is balanced. Combining them lets each model do what it does best.
