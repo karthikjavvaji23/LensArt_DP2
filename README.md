@@ -12,8 +12,8 @@ regarding the artist and the historical context behind the painting giving depth
 - 📚 Artist biography via Wikipedia & Met Museum APIs
 - ⚡ Fast inference (1–2 seconds on CPU)
 - 🌐 Flask-based interactive web interface
-<img width="2450" height="1645" alt="image" src="https://github.com/user-attachments/assets/8c200b6a-d2ac-4a44-a4f1-23f41eb3ab90" />
 
+![Demo](https://raw.githubusercontent.com/karthikjavvaji23/LensArt_DP2/main/media/Recording%202026-04-30%20150925.gif)
   
 ## How to run
 
