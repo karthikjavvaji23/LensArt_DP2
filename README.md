@@ -12,6 +12,7 @@ regarding the artist and the historical context behind the painting giving depth
 - 📚 Artist biography via Wikipedia & Met Museum APIs
 - ⚡ Fast inference (1–2 seconds on CPU)
 - 🌐 Flask-based interactive web interface
+<img width="2450" height="1645" alt="image" src="https://github.com/user-attachments/assets/8c200b6a-d2ac-4a44-a4f1-23f41eb3ab90" />
 
   
 ## How to run
