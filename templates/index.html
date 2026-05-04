@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ title }}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Lora:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<header class="hero">
+  <div class="brand">Lens<i>Art</i></div>
+  <div class="ornament">~ &nbsp;&diams;&nbsp; ~</div>
+  <p class="tagline">
+    Upload a painting and discover its style, its likely artist, the artist's story,
+    and visually kindred works — drawn from a hybrid ResNet50 + CLIP backend.
+  </p>
+  <!-- Model status row -->
+  <div id="model-status" class="model-status">
+    <span class="ms-badge ms-resnet">ResNet50 — style</span>
+    <span class="ms-badge ms-clip">CLIP — artist</span>
+    <span class="ms-badge ms-clip">CLIP — similarity</span>
+    <span class="ms-badge ms-wiki">Wikipedia — biography</span>
+  </div>
+</header>
+
+<main>
+  <aside class="sidebar">
+    <h2>Choose an artwork</h2>
+    <form id="upload-form">
+      <label class="file-drop">
+        <input type="file" name="image" id="file-input" accept="image/*">
+        <span>Drop a JPEG or PNG, or click to browse</span>
+      </label>
+      <button type="submit" class="primary">Analyse</button>
+    </form>
+    {% if samples %}
+    <hr>
+    <h3>…or pick a sample:</h3>
+    <ul class="sample-list">
+      {% for s in samples %}
+      <li><button class="sample-btn" data-sample="{{ s.name }}">{{ s.title }}</button></li>
+      {% endfor %}
+    </ul>
+    {% endif %}
+    <hr>
+    <p class="meta">
+      <strong>Style</strong> · ResNet50 fine-tuned on ArtBench-10<br>
+      <strong>Artist</strong> · CLIP ViT-B/32 zero-shot<br>
+      <strong>Similarity</strong> · CLIP image embeddings<br>
+      <strong>Biography</strong> · Wikipedia · Met fallback
+    </p>
+  </aside>
+
+  <section id="results" class="results">
+    <div id="empty" class="empty">
+      <h2>Step into the gallery —</h2>
+      <p>upload an artwork on the left, or pick one from the sample list, and
+         LensArt will run the hybrid pipeline: ResNet50 for the stylistic
+         movement, CLIP for the most-likely artist, CLIP-embedding similarity
+         for kindred works, and Wikipedia for the biography. Each section is
+         labelled with the model that produced it.</p>
+    </div>
+
+    <div id="loading" class="loading hidden">
+      <div class="spinner"></div>
+      <p>Analysing the artwork…</p>
+    </div>
+
+    <div id="output" class="hidden">
+      <div class="grid">
+        <div class="upload-preview">
+          <img id="preview" src="" alt="uploaded artwork">
+          <p id="backend" class="backend"></p>
+        </div>
+        <div class="predictions">
+          <div id="timing" class="timing"></div>
+
+          <div class="section">
+            <div class="section-head">
+              <h3>Stylistic Movement</h3>
+              <span class="model-tag tag-resnet">▣ ResNet50 (trained)</span>
+            </div>
+            <p class="subhead">Top-3 styles from ArtBench-10 (10 supervised classes)</p>
+            <div id="style-bars"></div>
+          </div>
+
+          <div class="section">
+            <div class="section-head">
+              <h3>Attributed Artist</h3>
+              <span class="model-tag tag-clip">◈ CLIP ViT-B/32 (zero-shot)</span>
+            </div>
+            <p class="subhead">Top-5 most likely creators ranked by cos(image, "a painting by {artist}")</p>
+            <div id="artist-bars"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-head">
+          <h3>About the Artist</h3>
+          <span class="model-tag tag-wiki">⚘ Wikipedia REST</span>
+        </div>
+        <p class="subhead">Drawn from Wikipedia, with the Met Museum as fallback</p>
+        <div id="bio" class="card"></div>
+      </div>
+
+      <div class="section">
+        <div class="section-head">
+          <h3>Kindred Works</h3>
+          <span class="model-tag tag-clip">◈ CLIP image embeddings</span>
+        </div>
+        <p class="subhead">Top-5 visually similar paintings — cosine similarity over the indexed corpus</p>
+        <div id="similar" class="similar-grid"></div>
+      </div>
+
+      <div class="section">
+        <div class="section-head">
+          <h3>How the prediction was made</h3>
+          <span class="model-tag tag-meta">▤ Hybrid pipeline</span>
+        </div>
+        <p class="subhead">Each task is delegated to the model best suited for it</p>
+        <div class="card pipeline-card">
+          <div class="pipeline-row">
+            <span class="pipe-step pipe-resnet">ResNet50</span>
+            <span class="pipe-arrow">→</span>
+            <span>predicts the <strong>style</strong> from the 10 ArtBench classes
+              (supervised, fine-tuned on labelled data).</span>
+          </div>
+          <div class="pipeline-row">
+            <span class="pipe-step pipe-clip">CLIP</span>
+            <span class="pipe-arrow">→</span>
+            <span>predicts the <strong>artist</strong> by cosine similarity between
+              the image embedding and 41 text prompts (zero-shot).</span>
+          </div>
+          <div class="pipeline-row">
+            <span class="pipe-step pipe-clip">CLIP</span>
+            <span class="pipe-arrow">→</span>
+            <span>retrieves the <strong>top-5 similar works</strong> from the cached
+              embedding index (cosine similarity, sub-millisecond).</span>
+          </div>
+          <div class="pipeline-row">
+            <span class="pipe-step pipe-wiki">Wikipedia</span>
+            <span class="pipe-arrow">→</span>
+            <span>fetches the artist <strong>biography</strong> via REST. Met Museum
+              acts as the fallback when Wikipedia returns nothing useful.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="error" class="error hidden"></div>
+  </section>
+</main>
+
+<script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>

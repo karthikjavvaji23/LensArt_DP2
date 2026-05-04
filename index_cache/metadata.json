@@ -1,0 +1,32 @@
+[
+  {
+    "title": "Hokusai Wave",
+    "rel": "hokusai_wave.jpg",
+    "style": "sample",
+    "is_sample": true
+  },
+  {
+    "title": "Monet Water Lilies",
+    "rel": "monet_water_lilies.jpg",
+    "style": "sample",
+    "is_sample": true
+  },
+  {
+    "title": "Picasso Geometric",
+    "rel": "picasso_geometric.jpg",
+    "style": "sample",
+    "is_sample": true
+  },
+  {
+    "title": "Rothko Color Field",
+    "rel": "rothko_color_field.jpg",
+    "style": "sample",
+    "is_sample": true
+  },
+  {
+    "title": "Vincent Van Gogh Starry Night",
+    "rel": "vincent_van_gogh_starry_night.jpg",
+    "style": "sample",
+    "is_sample": true
+  }
+]
