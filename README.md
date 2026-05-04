@@ -2,7 +2,9 @@
 LensArt is a Art Recognition and Discovery System which works on a deep learning system that takes the
 uploaded image of any painting and provides more context to it like the artist name, a simple amount of information
 regarding the artist and the historical context behind the painting giving depth to the work 
-
+<p align="center">
+  <img src="media/Recording%202026-04-30%20150925.gif" width="50%"/>
+</p>
 ## 🚀 Features
 
 - 🖼️ Upload any artwork image (JPEG/PNG)
@@ -12,8 +14,6 @@ regarding the artist and the historical context behind the painting giving depth
 - 📚 Artist biography via Wikipedia & Met Museum APIs
 - ⚡ Fast inference (1–2 seconds on CPU)
 - 🌐 Flask-based interactive web interface
-
-![Demo](https://raw.githubusercontent.com/karthikjavvaji23/LensArt_DP2/main/media/Recording%202026-04-30%20150925.gif)
   
 ## How to run
 
